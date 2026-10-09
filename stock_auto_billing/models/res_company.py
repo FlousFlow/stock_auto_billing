@@ -20,6 +20,13 @@ class ResCompany(models.Model):
         help='Post the automatically created customer invoice.',
         default=False,
     )
+    sab_auto_invoice_on_sale_confirmation = fields.Boolean(
+        string='Invoice Sales Orders on Confirmation',
+        help='Create a customer invoice immediately when a sales order is confirmed. '
+             'The delivery is still created by standard Odoo and remains available '
+             'for the normal stock workflow.',
+        default=False,
+    )
     # --- تفعيل إنشاء إشعار دائن للعميل بعد اعتماد مرتجع ---
     sab_auto_credit_customer_return = fields.Boolean(
         string='Automatic Customer Credit Notes',
@@ -44,6 +51,13 @@ class ResCompany(models.Model):
     sab_auto_post_bill = fields.Boolean(
         string='Post Vendor Bills Automatically',
         help='Post the automatically created vendor bill.',
+        default=False,
+    )
+    sab_auto_bill_on_purchase_confirmation = fields.Boolean(
+        string='Bill Purchase Orders on Confirmation',
+        help='Create a vendor bill immediately when a purchase order is confirmed. '
+             'The receipt is still created by standard Odoo and remains available '
+             'for the normal stock workflow.',
         default=False,
     )
     # --- تفعيل إنشاء إشعار دائن للمورد بعد اعتماد مرتجع للمورد ---

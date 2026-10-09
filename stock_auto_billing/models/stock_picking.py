@@ -136,7 +136,12 @@ class StockPicking(models.Model):
                     )
             elif self.sale_id:
                 # --- تسليم مرتبط بأمر بيع: ننشئ فاتورة عميل ---
-                if self.company_id.sab_auto_invoice_delivery:
+                existing_invoices = self._search_customer_invoices_for_lines(
+                    self.sale_id.order_line
+                ).filtered('sab_order_confirmation')
+                if existing_invoices:
+                    self._link_existing_account_move(existing_invoices.sorted('id')[-1])
+                elif self.company_id.sab_auto_invoice_delivery:
                     self._create_customer_invoice_from_delivery()
                 else:
                     # --- الإعداد معطل لهذه الشركة ---
@@ -159,7 +164,12 @@ class StockPicking(models.Model):
                     )
             elif self.purchase_id:
                 # --- استلام مرتبط بأمر شراء: ننشئ فاتورة مورد ---
-                if self.company_id.sab_auto_bill_receipt:
+                existing_bills = self._search_vendor_bills_for_lines(
+                    self.purchase_id.order_line
+                ).filtered('sab_order_confirmation')
+                if existing_bills:
+                    self._link_existing_account_move(existing_bills.sorted('id')[-1])
+                elif self.company_id.sab_auto_bill_receipt:
                     self._create_vendor_bill_from_receipt()
                 else:
                     # --- الإعداد معطل لهذه الشركة ---
@@ -770,6 +780,15 @@ class StockPicking(models.Model):
     # ------------------------------------------------------------------
     # إدارة الحالة والخطأ
     # ------------------------------------------------------------------
+    def _link_existing_account_move(self, move):
+        """Link an invoice/bill created at order confirmation to this picking."""
+        self.ensure_one()
+        self.write({
+            'auto_account_move_id': move.id,
+            'auto_billing_state': 'posted' if move.state == 'posted' else 'created',
+            'auto_billing_error': False,
+        })
+
     def _mark_not_applicable(self, message=''):
         """تحديد أن الفوترة التلقائية غير قابلة للتطبيق على هذا التسليم."""
         # --- نكتب الحالة ورسالة توضيحية (اختيارية) ---

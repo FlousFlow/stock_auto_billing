@@ -2,7 +2,8 @@
 
 Automatically create the appropriate accounting document when a stock picking is
 validated, based **only** on the quantity actually delivered, received or
-returned.
+returned. It can also create the customer invoice or vendor bill immediately
+when the related order is confirmed.
 
 Odoo 20 Community | Dependencies: `sale_stock`, `purchase_stock`, `account`
 
@@ -14,6 +15,10 @@ Odoo 20 Community | Dependencies: `sale_stock`, `purchase_stock`, `account`
 | Customer return (return of a delivery) | Customer Credit Note (returned qty only) | Draft |
 | Vendor receipt linked to a confirmed Purchase Order | Vendor Bill (received qty only) | Draft |
 | Return to vendor (return of a receipt) | Vendor Credit Note (returned qty only) | Draft |
+
+When order-confirmation billing is enabled, the full ordered quantity is billed
+at confirmation. Later delivery/receipt validation links the existing document
+to the picking and does not create a duplicate.
 
 * Documents keep the source order line **price, discount, taxes, currency,
   payment terms, fiscal position and analytic distribution**.
@@ -37,10 +42,14 @@ All settings are **per-company** (each company can enable/disable independently)
 
 * **Automatic Customer Invoices** — create an invoice after delivery validation (default on).
 * **Post Customer Invoices Automatically** (default off).
+* **Invoice Sales Orders on Confirmation** — create the customer invoice as soon
+  as a sales order is confirmed (default off).
 * **Automatic Customer Credit Notes** — after customer return validation (default on).
 * **Post Customer Credit Notes Automatically** (default off).
 * **Automatic Vendor Bills** — after receipt validation (default on).
 * **Post Vendor Bills Automatically** (default off).
+* **Bill Purchase Orders on Confirmation** — create the vendor bill as soon as a
+  purchase order is confirmed (default off).
 * **Automatic Vendor Credit Notes** — after vendor return validation (default on).
 * **Post Vendor Credit Notes Automatically** (default off).
 * **Reduce Order Quantity on Customer Return** — after a customer return is
@@ -68,6 +77,10 @@ idempotent and never creates duplicates.
 * The automation runs inside `stock.picking._action_done()` — the single point
   where a picking actually completes validation (called by `button_validate()`
   in every path, including the backorder wizard).
+* Order-confirmation billing runs after standard `sale.order.action_confirm()` or
+  `purchase.order.button_confirm()`. Standard Odoo still creates the delivery or
+  receipt; the accounting document is created separately and remains linked to
+  the order.
 * It runs **after** the inventory operation is complete and never blocks it: if
   document creation fails, the error is caught, stored in
   `auto_billing_error`, the state is set to `failed`, a clear message is posted

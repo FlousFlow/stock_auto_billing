@@ -2,9 +2,9 @@
 # --- تعريف موديول الفوترة التلقائية على اعتماد الحركات المخزنية ---
 {
     'name': 'Stock Auto Billing',
-    'version': '20.0.1.0.0',
+    'version': '20.0.2.0.0',
     'category': 'Inventory/Inventory',
-    'summary': 'Automatically create invoices, credit notes and bills when stock pickings are validated',
+    'summary': 'Automatically bill orders and stock pickings with duplicate-safe accounting links',
     'description': """
 Stock Auto Billing
 ==================
@@ -16,6 +16,7 @@ returned:
 * Customer return validated    -> Customer Credit Note (returned quantities only).
 * Vendor receipt validated     -> Vendor Bill (received quantities only).
 * Return to vendor validated   -> Vendor Credit Note (returned quantities only).
+* Sales / purchase order confirmed -> Customer invoice / vendor bill (optional).
 
 All documents preserve the source order line price, discount, taxes, currency,
 payment terms, fiscal position and analytic distribution. Partial deliveries /

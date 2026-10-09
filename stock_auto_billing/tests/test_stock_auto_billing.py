@@ -123,6 +123,18 @@ class TestStockAutoBilling(TestSaleCommon):
     # ------------------------------------------------------------------
     # اختبارات المبيعات والتسليمات
     # ------------------------------------------------------------------
+    def test_sale_confirmation_creates_customer_invoice(self):
+        """Optional order-confirmation invoicing creates the invoice immediately."""
+        self.env.company.sab_auto_invoice_on_sale_confirmation = True
+        so = self._create_sale_order(self.stock_product, 5)
+
+        self.assertEqual(len(so.invoice_ids), 1)
+        invoice = so.invoice_ids
+        self.assertEqual(invoice.move_type, 'out_invoice')
+        self.assertEqual(invoice.state, 'draft')
+        self.assertEqual(self._product_line(invoice).quantity, 5)
+        self.assertEqual(so.picking_ids.auto_billing_state, 'not_processed')
+
     def test_delivery_creates_customer_invoice(self):
         """تسليم كامل ينشئ فاتورة عميل بالكمية المسلّمة ويربطها بالتسليم وأمر البيع."""
         # --- ننشئ أمر بيع بكمية 5 ونؤكده ---
@@ -218,6 +230,18 @@ class TestStockAutoBilling(TestSaleCommon):
     # ------------------------------------------------------------------
     # اختبارات المشتريات والاستلامات
     # ------------------------------------------------------------------
+    def test_purchase_confirmation_creates_vendor_bill(self):
+        """Optional order-confirmation billing creates the bill immediately."""
+        self.env.company.sab_auto_bill_on_purchase_confirmation = True
+        po = self._create_purchase_order(self.stock_product, 5)
+
+        self.assertEqual(len(po.invoice_ids), 1)
+        bill = po.invoice_ids
+        self.assertEqual(bill.move_type, 'in_invoice')
+        self.assertEqual(bill.state, 'draft')
+        self.assertEqual(self._product_line(bill).quantity, 5)
+        self.assertEqual(po.picking_ids.auto_billing_state, 'not_processed')
+
     def test_receipt_creates_vendor_bill(self):
         """استلام كامل ينشئ فاتورة مورد بالكمية المستلمة ويربطها بالاستلام وأمر الشراء."""
         # --- أمر شراء بكمية 5 ---

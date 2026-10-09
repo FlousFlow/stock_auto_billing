@@ -19,6 +19,10 @@
                                  help="Post the automatically created customer invoice.">
                             <field name="sab_auto_post_invoice"/>
                         </setting>
+                        <setting id="sab_auto_invoice_on_sale_confirmation"
+                                 help="Create a customer invoice immediately when a sales order is confirmed.">
+                            <field name="sab_auto_invoice_on_sale_confirmation"/>
+                        </setting>
                     </block>
                     <!-- إعدادات مرتجعات العملاء -->
                     <block title="Customer Returns" name="sab_customer_return_block">
@@ -44,6 +48,10 @@
                         <setting id="sab_auto_post_bill"
                                  help="Post the automatically created vendor bill.">
                             <field name="sab_auto_post_bill"/>
+                        </setting>
+                        <setting id="sab_auto_bill_on_purchase_confirmation"
+                                 help="Create a vendor bill immediately when a purchase order is confirmed.">
+                            <field name="sab_auto_bill_on_purchase_confirmation"/>
                         </setting>
                     </block>
                     <!-- إعدادات مرتجعات الموردين -->
