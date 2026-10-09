@@ -1,0 +1,415 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * stock_auto_billing
+#
+# Translation of the Automatic Billing module to Arabic.
+# الموديول: الفوترة التلقائية على اعتماد الحركات المخزنية
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 20.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-02 08:47+0000\n"
+"PO-Revision-Date: 2026-08-02 08:47+0000\n"
+"Last-Translator: Flous Flow / Mohamed Gamal\n"
+"Language-Team: Flous Flow\n"
+"Language: ar_001\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && "
+"n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/stock_picking.py:0
+msgid "All delivered quantities are already invoiced."
+msgstr "جميع الكميات المسلّمة مفوتَرة بالفعل."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/stock_picking.py:0
+msgid "All received quantities are already billed."
+msgstr "جميع الكميات المستلمة مفوتَرة بالفعل."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/stock_picking.py:0
+msgid "All returned quantities are already refunded."
+msgstr "جميع الكميات المرتجعة مخصومة بالفعل."
+
+#. module: stock_auto_billing
+#: model_terms:ir.ui.view,arch_db:stock_auto_billing.res_config_settings_view_form_auto_billing
+#: model_terms:ir.ui.view,arch_db:stock_auto_billing.view_picking_form_auto_billing
+msgid "Automatic Billing"
+msgstr "الفوترة التلقائية"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,field_description:stock_auto_billing.field_stock_picking__auto_billing_error
+msgid "Automatic Billing Error"
+msgstr "خطأ الفوترة التلقائية"
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/stock_picking.py:0
+msgid "Automatic Billing Failed"
+msgstr "فشلت الفوترة التلقائية"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,field_description:stock_auto_billing.field_stock_picking__auto_billing_state
+msgid "Automatic Billing Status"
+msgstr "حالة الفوترة التلقائية"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_company__sab_auto_credit_customer_return
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_config_settings__sab_auto_credit_customer_return
+msgid "Automatic Customer Credit Notes"
+msgstr "إشعارات الدائن للعملاء التلقائية"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_company__sab_auto_invoice_delivery
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_config_settings__sab_auto_invoice_delivery
+msgid "Automatic Customer Invoices"
+msgstr "فواتير العملاء التلقائية"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_company__sab_auto_bill_receipt
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_config_settings__sab_auto_bill_receipt
+msgid "Automatic Vendor Bills"
+msgstr "فواتير الموردين التلقائية"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_company__sab_auto_credit_vendor_return
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_config_settings__sab_auto_credit_vendor_return
+msgid "Automatic Vendor Credit Notes"
+msgstr "إشعارات الدائن للموردين التلقائية"
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/stock_picking.py:0
+msgid ""
+"Automatic billing failed while creating the accounting document. The picking"
+" has been validated, but no accounting document was created. Error: %s"
+msgstr ""
+"فشلت الفوترة التلقائية أثناء إنشاء المستند المحاسبي. تم اعتماد الحركة، لكن "
+"لم يُنشأ أي مستند محاسبي. الخطأ: %s"
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/stock_picking.py:0
+msgid "Automatic billing failed: %s"
+msgstr "فشلت الفوترة التلقائية: %s"
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/stock_picking.py:0
+msgid ""
+"Automatic billing was already processed for %s. Retry is only possible for "
+"failed or unprocessed pickings."
+msgstr ""
+"تمت معالجة الفوترة التلقائية بالفعل لـ %s. إعادة المحاولة ممكنة فقط للحركات "
+"الفاشلة أو غير المعالجة."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/stock_picking.py:0
+msgid "Automatic customer credit notes are disabled for this company."
+msgstr "إشعارات الدائن التلقائية للعملاء معطلة لهذه الشركة."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/stock_picking.py:0
+msgid "Automatic customer invoices are disabled for this company."
+msgstr "فواتير العملاء التلقائية معطلة لهذه الشركة."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/stock_picking.py:0
+msgid "Automatic vendor bills are disabled for this company."
+msgstr "فواتير الموردين التلقائية معطلة لهذه الشركة."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/stock_picking.py:0
+msgid "Automatic vendor credit notes are disabled for this company."
+msgstr "إشعارات الدائن التلقائية للموردين معطلة لهذه الشركة."
+
+#. module: stock_auto_billing
+#: model_terms:ir.ui.view,arch_db:stock_auto_billing.view_picking_form_auto_billing
+msgid "Billing"
+msgstr "الفوترة"
+
+#. module: stock_auto_billing
+#: model:ir.model,name:stock_auto_billing.model_res_company
+msgid "Companies"
+msgstr "الشركات"
+
+#. module: stock_auto_billing
+#: model:ir.model,name:stock_auto_billing.model_res_config_settings
+msgid "Config Settings"
+msgstr "تهيئة الإعدادات"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,help:stock_auto_billing.field_res_company__sab_auto_credit_customer_return
+#: model:ir.model.fields,help:stock_auto_billing.field_res_config_settings__sab_auto_credit_customer_return
+#: model_terms:ir.ui.view,arch_db:stock_auto_billing.res_config_settings_view_form_auto_billing
+msgid ""
+"Create a customer credit note automatically when a customer return picking "
+"is validated."
+msgstr "إنشاء إشعار دائن للعميل تلقائياً عند اعتماد حركة مرتجع من العميل."
+
+#. module: stock_auto_billing
+#: model_terms:ir.ui.view,arch_db:stock_auto_billing.res_config_settings_view_form_auto_billing
+msgid ""
+"Create a customer invoice automatically when a delivery linked to a "
+"confirmed sale order is validated."
+msgstr "إنشاء فاتورة عميل تلقائياً عند اعتماد تسليم مرتبط بأمر بيع مؤكد."
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,help:stock_auto_billing.field_res_company__sab_auto_invoice_delivery
+#: model:ir.model.fields,help:stock_auto_billing.field_res_config_settings__sab_auto_invoice_delivery
+msgid ""
+"Create a customer invoice automatically when an outgoing delivery linked to "
+"a confirmed sale order is validated."
+msgstr ""
+"إنشاء فاتورة عميل تلقائياً عند اعتماد تسليم صادر مرتبط بأمر بيع مؤكد."
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,help:stock_auto_billing.field_res_company__sab_auto_bill_receipt
+#: model:ir.model.fields,help:stock_auto_billing.field_res_config_settings__sab_auto_bill_receipt
+#: model_terms:ir.ui.view,arch_db:stock_auto_billing.res_config_settings_view_form_auto_billing
+msgid ""
+"Create a vendor bill automatically when an incoming receipt linked to a "
+"confirmed purchase order is validated."
+msgstr ""
+"إنشاء فاتورة مورد تلقائياً عند اعتماد استلام وارد مرتبط بأمر شراء مؤكد."
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,help:stock_auto_billing.field_res_company__sab_auto_credit_vendor_return
+#: model:ir.model.fields,help:stock_auto_billing.field_res_config_settings__sab_auto_credit_vendor_return
+#: model_terms:ir.ui.view,arch_db:stock_auto_billing.res_config_settings_view_form_auto_billing
+msgid ""
+"Create a vendor credit note automatically when a return to vendor picking is"
+" validated."
+msgstr ""
+"إنشاء إشعار دائن للمورد تلقائياً عند اعتماد حركة مرتجع إلى المورد."
+
+#. module: stock_auto_billing
+#: model:ir.model.fields.selection,name:stock_auto_billing.selection__stock_picking__auto_billing_state__created
+msgid "Created"
+msgstr "تم الإنشاء"
+
+#. module: stock_auto_billing
+#: model_terms:ir.ui.view,arch_db:stock_auto_billing.res_config_settings_view_form_auto_billing
+msgid "Customer Returns"
+msgstr "مرتجعات العملاء"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_company__display_name
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:stock_auto_billing.field_stock_picking__display_name
+msgid "Display Name"
+msgstr "اسم العرض"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields.selection,name:stock_auto_billing.selection__stock_picking__auto_billing_state__failed
+msgid "Failed"
+msgstr "فشل"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,field_description:stock_auto_billing.field_stock_picking__auto_account_move_id
+msgid "Generated Accounting Document"
+msgstr "المستند المحاسبي المُنشأ"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_company__id
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_config_settings__id
+#: model:ir.model.fields,field_description:stock_auto_billing.field_stock_picking__id
+msgid "ID"
+msgstr "المُعرف"
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/stock_picking.py:0
+msgid "No bill line found for purchase order line %s."
+msgstr "لا يوجد سطر فاتورة مورد لبند أمر الشراء %s."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/stock_picking.py:0
+msgid "No customer invoice found for the original delivery of picking %s."
+msgstr "لا توجد فاتورة عميل للتسليم الأصلي للحركة %s."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/stock_picking.py:0
+msgid "No delivered sale order line found in this picking."
+msgstr "لا يوجد بند أمر بيع مُسلَّم في هذه الحركة."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/stock_picking.py:0
+msgid "No invoice line found for sale order line %s."
+msgstr "لا يوجد سطر فاتورة لبند أمر البيع %s."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/stock_picking.py:0
+msgid "No received purchase order line found in this picking."
+msgstr "لا يوجد بند أمر شراء مستلم في هذه الحركة."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/stock_picking.py:0
+msgid "No returned purchase order line found in this picking."
+msgstr "لا يوجد بند أمر شراء مرتجع في هذه الحركة."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/stock_picking.py:0
+msgid "No returned sale order line found in this picking."
+msgstr "لا يوجد بند أمر بيع مرتجع في هذه الحركة."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/stock_picking.py:0
+msgid "No vendor bill found for the original receipt of picking %s."
+msgstr "لا توجد فاتورة مورد للاستلام الأصلي للحركة %s."
+
+#. module: stock_auto_billing
+#: model:ir.model.fields.selection,name:stock_auto_billing.selection__stock_picking__auto_billing_state__not_applicable
+msgid "Not Applicable"
+msgstr "غير قابل للتطبيق"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields.selection,name:stock_auto_billing.selection__stock_picking__auto_billing_state__not_processed
+msgid "Not Processed"
+msgstr "غير معالجة"
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/stock_picking.py:0
+msgid ""
+"Only Sales, Purchase, Accounting or System managers can retry automatic "
+"billing."
+msgstr ""
+"فقط مدراء المبيعات أو المشتريات أو المحاسبة أو النظام يمكنهم إعادة محاولة "
+"الفوترة التلقائية."
+
+#. module: stock_auto_billing
+#: model_terms:ir.ui.view,arch_db:stock_auto_billing.view_picking_form_auto_billing
+msgid "Open the accounting document generated automatically for this picking."
+msgstr "فتح المستند المحاسبي المُنشأ تلقائياً لهذه الحركة."
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_company__sab_auto_post_credit_customer
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_config_settings__sab_auto_post_credit_customer
+msgid "Post Customer Credit Notes Automatically"
+msgstr "ترحيل إشعارات الدائن للعملاء تلقائياً"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_company__sab_reduce_ordered_qty_on_return
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_config_settings__sab_reduce_ordered_qty_on_return
+msgid "Reduce Order Quantity on Customer Return"
+msgstr "تقليل كمية الطلب عند مرتجع العميل"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,help:stock_auto_billing.field_res_company__sab_reduce_ordered_qty_on_return
+#: model:ir.model.fields,help:stock_auto_billing.field_res_config_settings__sab_reduce_ordered_qty_on_return
+#: model_terms:ir.ui.view,arch_db:stock_auto_billing.res_config_settings_view_form_auto_billing
+msgid ""
+"Reduce the sale order line ordered quantity by the returned quantity when a "
+"customer return is credited. Keeps the order net quantity consistent with "
+"the delivered/invoiced net quantities."
+msgstr ""
+"تقليل الكمية المطلوبة في بند أمر البيع بمقدار الكمية المرتجعة عند عمل إشعار "
+"دائن لمرتجع العميل. يحافظ على كمية الطلب الصافية متسقة مع الكميات الصافية "
+"المسلّمة والمفوترة."
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_company__sab_auto_post_invoice
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_config_settings__sab_auto_post_invoice
+msgid "Post Customer Invoices Automatically"
+msgstr "ترحيل فواتير العملاء تلقائياً"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_company__sab_auto_post_bill
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_config_settings__sab_auto_post_bill
+msgid "Post Vendor Bills Automatically"
+msgstr "ترحيل فواتير الموردين تلقائياً"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_company__sab_auto_post_credit_vendor
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_config_settings__sab_auto_post_credit_vendor
+msgid "Post Vendor Credit Notes Automatically"
+msgstr "ترحيل إشعارات الدائن للموردين تلقائياً"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,help:stock_auto_billing.field_res_company__sab_auto_post_credit_customer
+#: model:ir.model.fields,help:stock_auto_billing.field_res_config_settings__sab_auto_post_credit_customer
+#: model_terms:ir.ui.view,arch_db:stock_auto_billing.res_config_settings_view_form_auto_billing
+msgid "Post the automatically created customer credit note."
+msgstr "ترحيل إشعار الدائن للعميل المُنشأ تلقائياً."
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,help:stock_auto_billing.field_res_company__sab_auto_post_invoice
+#: model:ir.model.fields,help:stock_auto_billing.field_res_config_settings__sab_auto_post_invoice
+#: model_terms:ir.ui.view,arch_db:stock_auto_billing.res_config_settings_view_form_auto_billing
+msgid "Post the automatically created customer invoice."
+msgstr "ترحيل فاتورة العميل المُنشأة تلقائياً."
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,help:stock_auto_billing.field_res_company__sab_auto_post_bill
+#: model:ir.model.fields,help:stock_auto_billing.field_res_config_settings__sab_auto_post_bill
+#: model_terms:ir.ui.view,arch_db:stock_auto_billing.res_config_settings_view_form_auto_billing
+msgid "Post the automatically created vendor bill."
+msgstr "ترحيل فاتورة المورد المُنشأة تلقائياً."
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,help:stock_auto_billing.field_res_company__sab_auto_post_credit_vendor
+#: model:ir.model.fields,help:stock_auto_billing.field_res_config_settings__sab_auto_post_credit_vendor
+#: model_terms:ir.ui.view,arch_db:stock_auto_billing.res_config_settings_view_form_auto_billing
+msgid "Post the automatically created vendor credit note."
+msgstr "ترحيل إشعار الدائن للمورد المُنشأ تلقائياً."
+
+#. module: stock_auto_billing
+#: model:ir.model.fields.selection,name:stock_auto_billing.selection__stock_picking__auto_billing_state__posted
+msgid "Posted"
+msgstr "تم الترحيل"
+
+#. module: stock_auto_billing
+#: model_terms:ir.ui.view,arch_db:stock_auto_billing.res_config_settings_view_form_auto_billing
+msgid "Purchases & Receipts"
+msgstr "المشتريات والاستلامات"
+
+#. module: stock_auto_billing
+#: model_terms:ir.ui.view,arch_db:stock_auto_billing.view_picking_form_auto_billing
+msgid "Retry Automatic Billing"
+msgstr "إعادة محاولة الفوترة التلقائية"
+
+#. module: stock_auto_billing
+#: model_terms:ir.ui.view,arch_db:stock_auto_billing.res_config_settings_view_form_auto_billing
+msgid "Sales & Deliveries"
+msgstr "المبيعات والتسليمات"
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/stock_picking.py:0
+msgid "The related purchase order is not confirmed."
+msgstr "أمر الشراء المرتبط غير مؤكد."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/stock_picking.py:0
+msgid "The related sale order is not confirmed."
+msgstr "أمر البيع المرتبط غير مؤكد."
+
+#. module: stock_auto_billing
+#: model:ir.model,name:stock_auto_billing.model_stock_picking
+msgid "Transfer"
+msgstr "تحويل"
+
+#. module: stock_auto_billing
+#: model_terms:ir.ui.view,arch_db:stock_auto_billing.res_config_settings_view_form_auto_billing
+msgid "Vendor Returns"
+msgstr "مرتجعات الموردين"

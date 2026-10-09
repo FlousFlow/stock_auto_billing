@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- تمديد شاشة التسليم/الاستلام بإضافة قسم الفوترة التلقائية -->
+    <record id="view_picking_form_auto_billing" model="ir.ui.view">
+        <field name="name">stock.picking.form.auto.billing</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <!-- زر ذكي لفتح المستند المحاسبي المُنشأ تلقائياً -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_auto_account_move" type="object"
+                        class="oe_stat_button" icon="fa-file-text-o"
+                        string="Billing"
+                        groups="account.group_account_readonly,account.group_account_invoice,account.group_account_manager"
+                        invisible="not auto_account_move_id"
+                        help="Open the accounting document generated automatically for this picking."/>
+            </xpath>
+            <!-- قسم الفوترة التلقائية داخل صفحة المعلومات الإضافية -->
+            <xpath expr="//page[@name='extra']" position="inside">
+                <group string="Automatic Billing" name="auto_billing_group">
+                    <group>
+                        <field name="auto_account_move_id" readonly="1"
+                               groups="account.group_account_readonly,account.group_account_invoice,account.group_account_manager"/>
+                        <field name="auto_billing_state" readonly="1" widget="badge"/>
+                        <field name="auto_billing_error" readonly="1"/>
+                    </group>
+                    <group>
+                        <button name="action_retry_auto_billing" type="object"
+                                string="Retry Automatic Billing"
+                                class="btn-primary"
+                                groups="sales_team.group_sale_manager,purchase.group_purchase_manager,account.group_account_manager,base.group_system"
+                                invisible="auto_billing_state not in ('failed', 'not_processed')"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

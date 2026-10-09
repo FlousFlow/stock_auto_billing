@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- إضافة إعدادات الفوترة التلقائية إلى شاشة الإعدادات -->
+    <record id="res_config_settings_view_form_auto_billing" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.stock.auto.billing</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Automatic Billing" string="Automatic Billing"
+                     name="stock_auto_billing">
+                    <!-- إعدادات المبيعات والتسليمات -->
+                    <block title="Sales &amp; Deliveries" name="sab_sales_block">
+                        <setting id="sab_auto_invoice_delivery"
+                                 help="Create a customer invoice automatically when a delivery linked to a confirmed sale order is validated.">
+                            <field name="sab_auto_invoice_delivery"/>
+                        </setting>
+                        <setting id="sab_auto_post_invoice"
+                                 help="Post the automatically created customer invoice.">
+                            <field name="sab_auto_post_invoice"/>
+                        </setting>
+                    </block>
+                    <!-- إعدادات مرتجعات العملاء -->
+                    <block title="Customer Returns" name="sab_customer_return_block">
+                        <setting id="sab_auto_credit_customer_return"
+                                 help="Create a customer credit note automatically when a customer return picking is validated.">
+                            <field name="sab_auto_credit_customer_return"/>
+                        </setting>
+                        <setting id="sab_auto_post_credit_customer"
+                                 help="Post the automatically created customer credit note.">
+                            <field name="sab_auto_post_credit_customer"/>
+                        </setting>
+                        <setting id="sab_reduce_ordered_qty_on_return"
+                                 help="Reduce the sale order line ordered quantity by the returned quantity when a customer return is credited.">
+                            <field name="sab_reduce_ordered_qty_on_return"/>
+                        </setting>
+                    </block>
+                    <!-- إعدادات المشتريات والاستلامات -->
+                    <block title="Purchases &amp; Receipts" name="sab_purchase_block">
+                        <setting id="sab_auto_bill_receipt"
+                                 help="Create a vendor bill automatically when an incoming receipt linked to a confirmed purchase order is validated.">
+                            <field name="sab_auto_bill_receipt"/>
+                        </setting>
+                        <setting id="sab_auto_post_bill"
+                                 help="Post the automatically created vendor bill.">
+                            <field name="sab_auto_post_bill"/>
+                        </setting>
+                    </block>
+                    <!-- إعدادات مرتجعات الموردين -->
+                    <block title="Vendor Returns" name="sab_vendor_return_block">
+                        <setting id="sab_auto_credit_vendor_return"
+                                 help="Create a vendor credit note automatically when a return to vendor picking is validated.">
+                            <field name="sab_auto_credit_vendor_return"/>
+                        </setting>
+                        <setting id="sab_auto_post_credit_vendor"
+                                 help="Post the automatically created vendor credit note.">
+                            <field name="sab_auto_post_credit_vendor"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>
