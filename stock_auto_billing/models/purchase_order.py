@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Optional vendor bill creation when a purchase order is confirmed."""
 
-from odoo import Command, models
+from odoo import Command, fields, models
 
 
 class PurchaseOrder(models.Model):
@@ -39,6 +39,8 @@ class PurchaseOrder(models.Model):
         values = self._prepare_invoice()
         values.update({
             'sab_order_confirmation': True,
+            # Odoo 20 requires an invoice date before a vendor bill can be posted.
+            'invoice_date': fields.Date.today(),
             'invoice_line_ids': [],
         })
         for line in bill_lines:

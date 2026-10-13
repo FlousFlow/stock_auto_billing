@@ -242,6 +242,16 @@ class TestStockAutoBilling(TestSaleCommon):
         self.assertEqual(self._product_line(bill).quantity, 5)
         self.assertEqual(po.picking_ids.auto_billing_state, 'not_processed')
 
+    def test_purchase_confirmation_auto_post_sets_invoice_date(self):
+        """An automatically posted confirmation bill has the required invoice date."""
+        self.env.company.sab_auto_bill_on_purchase_confirmation = True
+        self.env.company.sab_auto_post_bill = True
+        po = self._create_purchase_order(self.stock_product, 5)
+
+        bill = po.invoice_ids
+        self.assertEqual(bill.state, 'posted')
+        self.assertTrue(bill.invoice_date)
+
     def test_receipt_creates_vendor_bill(self):
         """استلام كامل ينشئ فاتورة مورد بالكمية المستلمة ويربطها بالاستلام وأمر الشراء."""
         # --- أمر شراء بكمية 5 ---
