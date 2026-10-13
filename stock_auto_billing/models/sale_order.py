@@ -13,12 +13,11 @@ class SaleOrder(models.Model):
         return result
 
     def _auto_create_invoice_on_confirmation(self):
-        """Create one draft customer invoice per eligible confirmed order."""
-        for order in self.filtered(
-            lambda sale: sale.state in ('sale', 'done')
-            and sale.company_id.sab_auto_invoice_on_sale_confirmation
-        ):
-            order._create_confirmation_invoice()
+        """Run optional confirmation-time invoicing and delivery validation."""
+        for order in self.filtered(lambda sale: sale.state in ('sale', 'done')):
+            if order.company_id.sab_auto_invoice_on_sale_confirmation:
+                order._create_confirmation_invoice()
+            order.picking_ids._auto_validate_from_order_confirmation()
 
     def _create_confirmation_invoice(self):
         self.ensure_one()

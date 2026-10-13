@@ -13,12 +13,11 @@ class PurchaseOrder(models.Model):
         return result
 
     def _auto_create_bill_on_confirmation(self):
-        """Create one draft vendor bill per eligible fully confirmed order."""
-        for order in self.filtered(
-            lambda purchase: purchase.state == 'purchase'
-            and purchase.company_id.sab_auto_bill_on_purchase_confirmation
-        ):
-            order._create_confirmation_bill()
+        """Run optional confirmation-time billing and receipt validation."""
+        for order in self.filtered(lambda purchase: purchase.state == 'purchase'):
+            if order.company_id.sab_auto_bill_on_purchase_confirmation:
+                order._create_confirmation_bill()
+            order.picking_ids._auto_validate_from_order_confirmation()
 
     def _create_confirmation_bill(self):
         self.ensure_one()

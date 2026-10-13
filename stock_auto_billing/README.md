@@ -44,12 +44,16 @@ All settings are **per-company** (each company can enable/disable independently)
 * **Post Customer Invoices Automatically** (default off).
 * **Invoice Sales Orders on Confirmation** — create the customer invoice as soon
   as a sales order is confirmed (default off).
+* **Validate Deliveries on Sales Confirmation** — validate a delivery automatically
+  when the complete requested quantity is available (default off).
 * **Automatic Customer Credit Notes** — after customer return validation (default on).
 * **Post Customer Credit Notes Automatically** (default off).
 * **Automatic Vendor Bills** — after receipt validation (default on).
 * **Post Vendor Bills Automatically** (default off).
 * **Bill Purchase Orders on Confirmation** — create the vendor bill as soon as a
   purchase order is confirmed (default off).
+* **Validate Receipts on Purchase Confirmation** — validate the incoming receipt
+  automatically after purchase confirmation (default off).
 * **Automatic Vendor Credit Notes** — after vendor return validation (default on).
 * **Post Vendor Credit Notes Automatically** (default off).
 * **Reduce Order Quantity on Customer Return** — after a customer return is
@@ -81,6 +85,10 @@ idempotent and never creates duplicates.
   `purchase.order.button_confirm()`. Standard Odoo still creates the delivery or
   receipt; the accounting document is created separately and remains linked to
   the order.
+* Automatic stock validation is opt-in and conservative: outgoing deliveries are
+  validated only when all requested quantities are reserved. Missing stock,
+  lot/serial data or another standard validation requirement leaves the picking
+  ready and records the reason in its chatter; order confirmation is not blocked.
 * It runs **after** the inventory operation is complete and never blocks it: if
   document creation fails, the error is caught, stored in
   `auto_billing_error`, the state is set to `failed`, a clear message is posted

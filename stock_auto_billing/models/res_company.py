@@ -27,6 +27,12 @@ class ResCompany(models.Model):
              'for the normal stock workflow.',
         default=False,
     )
+    sab_auto_validate_delivery_on_sale_confirmation = fields.Boolean(
+        string='Validate Deliveries on Sales Confirmation',
+        help='Automatically validate the outgoing delivery after a sales order is '
+             'confirmed, only when the full requested quantity is available.',
+        default=False,
+    )
     # --- تفعيل إنشاء إشعار دائن للعميل بعد اعتماد مرتجع ---
     sab_auto_credit_customer_return = fields.Boolean(
         string='Automatic Customer Credit Notes',
@@ -58,6 +64,12 @@ class ResCompany(models.Model):
         help='Create a vendor bill immediately when a purchase order is confirmed. '
              'The receipt is still created by standard Odoo and remains available '
              'for the normal stock workflow.',
+        default=False,
+    )
+    sab_auto_validate_receipt_on_purchase_confirmation = fields.Boolean(
+        string='Validate Receipts on Purchase Confirmation',
+        help='Automatically validate the incoming receipt after a purchase order '
+             'is confirmed.',
         default=False,
     )
     # --- تفعيل إنشاء إشعار دائن للمورد بعد اعتماد مرتجع للمورد ---

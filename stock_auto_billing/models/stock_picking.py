@@ -73,6 +73,64 @@ class StockPicking(models.Model):
         # --- نرجع نتيجة الاعتماد الأصلية ---
         return res
 
+    def _auto_validate_from_order_confirmation(self):
+        """Validate eligible order pickings without creating partial stock moves.
+
+        This is intentionally opt-in per company. Outgoing deliveries are only
+        validated when all moves are reserved; incoming receipts can be completed
+        directly because their source is a supplier location. Any missing stock,
+        lot/serial data or other standard validation error is reported in the
+        picking chatter and does not block order confirmation.
+        """
+        for picking in self.filtered(lambda record: record.state not in ('done', 'cancel')):
+            company = picking.company_id
+            enabled = (
+                picking.picking_type_code == 'outgoing'
+                and company.sab_auto_validate_delivery_on_sale_confirmation
+            ) or (
+                picking.picking_type_code == 'incoming'
+                and company.sab_auto_validate_receipt_on_purchase_confirmation
+            )
+            if not enabled:
+                continue
+
+            try:
+                with self.env.cr.savepoint():
+                    picking = picking.sudo()
+                    if picking.state == 'draft':
+                        picking.with_context(skip_zero_demand_check=True).action_confirm()
+                    picking.action_assign()
+                    active_moves = picking.move_ids.filtered(
+                        lambda move: move.state not in ('done', 'cancel')
+                    )
+                    if not active_moves:
+                        continue
+                    if (
+                        picking.picking_type_code == 'outgoing'
+                        and any(move.state != 'assigned' for move in active_moves)
+                    ):
+                        picking.message_post(body=_(
+                            'Automatic validation was skipped because the full '
+                            'delivery quantity is not available.'
+                        ))
+                        continue
+                    for move in active_moves:
+                        move.quantity = move.product_uom_qty
+                    result = picking.with_context(skip_backorder=True).button_validate()
+                    if isinstance(result, dict):
+                        raise UserError(_(
+                            'Automatic validation requires a manual stock operation '
+                            'for this picking.'
+                        ))
+            except Exception as error:
+                _logger.warning(
+                    'Automatic stock validation failed for picking %s: %s',
+                    picking.name, error, exc_info=True,
+                )
+                picking.sudo().message_post(body=_(
+                    'Automatic stock validation was skipped: %s', error
+                ))
+
     def _auto_billing_process(self):
         """معالجة الفوترة التلقائية للتسليمات المكتملة. لا تمنع اعتماد التسليم أبداً."""
         # --- نختار فقط التسليمات المكتملة وغير المعالجة ---

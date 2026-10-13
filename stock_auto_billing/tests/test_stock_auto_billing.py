@@ -135,6 +135,13 @@ class TestStockAutoBilling(TestSaleCommon):
         self.assertEqual(self._product_line(invoice).quantity, 5)
         self.assertEqual(so.picking_ids.auto_billing_state, 'not_processed')
 
+    def test_sale_confirmation_can_validate_delivery(self):
+        """The opt-in setting validates a fully available delivery."""
+        self.env.company.sab_auto_validate_delivery_on_sale_confirmation = True
+        so = self._create_sale_order(self.stock_product, 5)
+
+        self.assertEqual(so.picking_ids.state, 'done')
+
     def test_delivery_creates_customer_invoice(self):
         """تسليم كامل ينشئ فاتورة عميل بالكمية المسلّمة ويربطها بالتسليم وأمر البيع."""
         # --- ننشئ أمر بيع بكمية 5 ونؤكده ---
@@ -251,6 +258,13 @@ class TestStockAutoBilling(TestSaleCommon):
         bill = po.invoice_ids
         self.assertEqual(bill.state, 'posted')
         self.assertTrue(bill.invoice_date)
+
+    def test_purchase_confirmation_can_validate_receipt(self):
+        """The opt-in setting validates the receipt after purchase confirmation."""
+        self.env.company.sab_auto_validate_receipt_on_purchase_confirmation = True
+        po = self._create_purchase_order(self.stock_product, 5)
+
+        self.assertEqual(po.picking_ids.state, 'done')
 
     def test_receipt_creates_vendor_bill(self):
         """استلام كامل ينشئ فاتورة مورد بالكمية المستلمة ويربطها بالاستلام وأمر الشراء."""
@@ -630,10 +644,12 @@ class TestStockAutoBilling(TestSaleCommon):
         # --- القيم الافتراضية للإعدادات الثمانية ---
         self.assertTrue(settings.sab_auto_invoice_delivery)
         self.assertFalse(settings.sab_auto_post_invoice)
+        self.assertFalse(settings.sab_auto_validate_delivery_on_sale_confirmation)
         self.assertTrue(settings.sab_auto_credit_customer_return)
         self.assertFalse(settings.sab_auto_post_credit_customer)
         self.assertTrue(settings.sab_auto_bill_receipt)
         self.assertFalse(settings.sab_auto_post_bill)
+        self.assertFalse(settings.sab_auto_validate_receipt_on_purchase_confirmation)
         self.assertTrue(settings.sab_auto_credit_vendor_return)
         self.assertFalse(settings.sab_auto_post_credit_vendor)
         self.assertTrue(settings.sab_reduce_ordered_qty_on_return)
