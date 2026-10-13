@@ -534,6 +534,7 @@ msgstr "فوترة تلقائية للطلبات والحركات المخزني
 
 #. module: stock_auto_billing
 #: model:ir.model.fields,help:stock_auto_billing.field_res_config_settings__sab_auto_validate_delivery_on_sale_confirmation
+#: model_terms:ir.ui.view,arch_db:stock_auto_billing.res_config_settings_view_form_auto_billing
 msgid "Automatically validate the delivery when the full requested quantity is available."
 msgstr "اعتماد حركة التسليم تلقائياً عند توفر كامل الكمية المطلوبة."
 
@@ -549,6 +550,7 @@ msgstr "اعتماد حركة التسليم الصادرة تلقائياً ب�
 
 #. module: stock_auto_billing
 #: model:ir.model.fields,help:stock_auto_billing.field_res_company__sab_auto_validate_receipt_on_purchase_confirmation
+#: model_terms:ir.ui.view,arch_db:stock_auto_billing.res_config_settings_view_form_auto_billing
 msgid "Automatically validate the receipt after a purchase order is confirmed."
 msgstr "اعتماد حركة الاستلام تلقائياً بعد تأكيد أمر الشراء."
 
@@ -722,6 +724,7 @@ msgstr "بند أمر البيع"
 
 #. module: stock_auto_billing
 #: model:ir.model.fields,help:stock_auto_billing.field_res_company__sab_reduce_ordered_qty_on_return
+#: model_terms:ir.ui.view,arch_db:stock_auto_billing.res_config_settings_view_form_auto_billing
 msgid "Reduce the sale order line ordered quantity by the returned quantity when a customer return is credited."
 msgstr "تقليل الكمية المطلوبة في بند أمر البيع بمقدار الكمية المرتجعة عند إصدار إشعار دائن لمرتجع العميل."
 
