@@ -2,7 +2,7 @@
 # --- تعريف موديول الفوترة التلقائية على اعتماد الحركات المخزنية ---
 {
     'name': 'Stock Auto Billing',
-    'version': '20.0.3.0.0',
+    'version': '20.0.5.0.0',
     'category': 'Inventory/Inventory',
     'summary': 'Automatically bill orders and stock pickings with duplicate-safe accounting links',
     'description': """

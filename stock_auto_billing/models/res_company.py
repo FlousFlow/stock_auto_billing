@@ -46,6 +46,12 @@ class ResCompany(models.Model):
         help='Post the automatically created customer credit note.',
         default=False,
     )
+    sab_auto_validate_customer_return_on_credit_note = fields.Boolean(
+        string='Validate Customer Returns from Credit Notes',
+        help='Create and validate a customer return for the quantities on a posted '
+             'credit note linked to a sales invoice.',
+        default=False,
+    )
     # --- تفعيل إنشاء فاتورة مورد تلقائياً بعد اعتماد الاستلام المرتبط بأمر شراء ---
     sab_auto_bill_receipt = fields.Boolean(
         string='Automatic Vendor Bills',
@@ -83,6 +89,12 @@ class ResCompany(models.Model):
     sab_auto_post_credit_vendor = fields.Boolean(
         string='Post Vendor Credit Notes Automatically',
         help='Post the automatically created vendor credit note.',
+        default=False,
+    )
+    sab_auto_validate_vendor_return_on_credit_note = fields.Boolean(
+        string='Validate Vendor Returns from Credit Notes',
+        help='Create and validate a vendor return for the quantities on a posted '
+             'credit note linked to a vendor bill.',
         default=False,
     )
     # --- تقليل كمية الطلب في أمر البيع بمقدار الكمية المرتجعة بعد المرتجع ---

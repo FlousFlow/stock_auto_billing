@@ -48,6 +48,8 @@ All settings are **per-company** (each company can enable/disable independently)
   when the complete requested quantity is available (default off).
 * **Automatic Customer Credit Notes** — after customer return validation (default on).
 * **Post Customer Credit Notes Automatically** (default off).
+* **Validate Customer Returns from Credit Notes** — create and validate a
+  customer return from the quantities on a linked, posted credit note (default off).
 * **Automatic Vendor Bills** — after receipt validation (default on).
 * **Post Vendor Bills Automatically** (default off).
 * **Bill Purchase Orders on Confirmation** — create the vendor bill as soon as a
@@ -56,6 +58,8 @@ All settings are **per-company** (each company can enable/disable independently)
   automatically after purchase confirmation (default off).
 * **Automatic Vendor Credit Notes** — after vendor return validation (default on).
 * **Post Vendor Credit Notes Automatically** (default off).
+* **Validate Vendor Returns from Credit Notes** — create and validate a vendor
+  return from the quantities on a linked, posted vendor credit note (default off).
 * **Reduce Order Quantity on Customer Return** — after a customer return is
   credited, the sale order line ordered quantity is reduced by the returned
   quantity (default on). Keeps the order net quantity consistent with the
@@ -89,6 +93,11 @@ idempotent and never creates duplicates.
   validated only when all requested quantities are reserved. Missing stock,
   lot/serial data or another standard validation requirement leaves the picking
   ready and records the reason in its chatter; order confirmation is not blocked.
+* Credit-note-driven returns are independently opt-in. When enabled, posting a
+  credit note linked to an original invoice/bill creates and validates a return
+  for the credited quantity only. Unlinked lines, quantities beyond completed
+  stock moves, or tracked products requiring lot/serial selection are left for
+  manual stock processing and reported on the credit note.
 * It runs **after** the inventory operation is complete and never blocks it: if
   document creation fails, the error is caught, stored in
   `auto_billing_error`, the state is set to `failed`, a clear message is posted

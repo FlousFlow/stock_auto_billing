@@ -2,7 +2,7 @@
 # --- اختبارات موديول الفوترة التلقائية على اعتماد الحركات المخزنية ---
 from unittest.mock import patch
 
-from odoo import Command
+from odoo import Command, fields
 from odoo.exceptions import UserError
 from odoo.tests import Form, tagged
 
@@ -31,6 +31,7 @@ class TestStockAutoBilling(TestSaleCommon):
         cls.stock_product = cls._create_product(
             name='SAB Stock Product',
             type='consu',
+            tracking=False,
             list_price=100.0,
             standard_price=60.0,
             invoice_policy='delivery',
@@ -41,6 +42,7 @@ class TestStockAutoBilling(TestSaleCommon):
         cls.order_product = cls._create_product(
             name='SAB Order Product',
             type='consu',
+            tracking=False,
             list_price=100.0,
             standard_price=60.0,
             invoice_policy='order',
@@ -305,6 +307,46 @@ class TestStockAutoBilling(TestSaleCommon):
     # ------------------------------------------------------------------
     # اختبارات مرتجعات العملاء
     # ------------------------------------------------------------------
+    def test_posted_customer_credit_note_validates_matching_return(self):
+        """A posted customer credit note returns only its credited quantity."""
+        self.env.company.sab_auto_validate_customer_return_on_credit_note = True
+        sale = self._create_sale_order(self.stock_product, 5)
+        delivery = self._validate_picking(sale.picking_ids, 5)
+        invoice = delivery.auto_account_move_id
+        invoice.invoice_date = fields.Date.today()
+        invoice.action_post()
+
+        credit = invoice._reverse_moves(default_values_list=[{
+            'invoice_date': fields.Date.today(),
+        }])
+        self._product_line(credit).quantity = 2
+        credit.action_post()
+
+        return_picking = self.env['stock.picking'].search([
+            ('sab_credit_note_id', '=', credit.id),
+        ])
+        self.assertEqual(len(return_picking), 1)
+        self.assertEqual(return_picking.state, 'done')
+        self.assertEqual(return_picking.move_ids.quantity, 2)
+        self.assertEqual(return_picking.auto_account_move_id, credit)
+        self.assertEqual(return_picking.auto_billing_state, 'posted')
+
+    def test_credit_note_generated_from_return_does_not_create_second_return(self):
+        """Posting a return-generated credit note must not return stock twice."""
+        self.env.company.sab_auto_validate_customer_return_on_credit_note = True
+        self.env.company.sab_auto_post_credit_customer = True
+        sale = self._create_sale_order(self.stock_product, 5)
+        delivery = self._validate_picking(sale.picking_ids, 5)
+        return_picking = self._create_return(delivery, 2)
+        self._validate_picking(return_picking, 2)
+
+        credit = return_picking.auto_account_move_id
+        self.assertEqual(credit.state, 'posted')
+        self.assertTrue(credit.sab_created_from_stock_return)
+        self.assertFalse(self.env['stock.picking'].search([
+            ('sab_credit_note_id', '=', credit.id),
+        ]))
+
     def test_customer_return_creates_credit_note(self):
         """مرتجع عميل ينشئ إشعار دائن بالكمية المرتجعة ويربطه بالفاتورة الأصلية."""
         # --- تسليم كامل وإنشاء فاتورة ---
@@ -385,6 +427,30 @@ class TestStockAutoBilling(TestSaleCommon):
     # ------------------------------------------------------------------
     # اختبارات مرتجعات الموردين
     # ------------------------------------------------------------------
+    def test_posted_vendor_credit_note_validates_matching_return(self):
+        """A posted vendor credit note returns only its credited quantity."""
+        self.env.company.sab_auto_validate_vendor_return_on_credit_note = True
+        purchase = self._create_purchase_order(self.stock_product, 5)
+        receipt = self._validate_picking(purchase.picking_ids, 5)
+        bill = receipt.auto_account_move_id
+        bill.invoice_date = fields.Date.today()
+        bill.action_post()
+
+        credit = bill._reverse_moves(default_values_list=[{
+            'invoice_date': fields.Date.today(),
+        }])
+        self._product_line(credit).quantity = 2
+        credit.action_post()
+
+        return_picking = self.env['stock.picking'].search([
+            ('sab_credit_note_id', '=', credit.id),
+        ])
+        self.assertEqual(len(return_picking), 1)
+        self.assertEqual(return_picking.state, 'done')
+        self.assertEqual(return_picking.move_ids.quantity, 2)
+        self.assertEqual(return_picking.auto_account_move_id, credit)
+        self.assertEqual(return_picking.auto_billing_state, 'posted')
+
     def test_vendor_return_creates_credit_note(self):
         """مرتجع مورد ينشئ إشعار دائن للمورد بالكمية المرتجعة ويربطه بالفاتورة الأصلية."""
         # --- استلام كامل وإنشاء فاتورة مورد ---
@@ -647,9 +713,11 @@ class TestStockAutoBilling(TestSaleCommon):
         self.assertFalse(settings.sab_auto_validate_delivery_on_sale_confirmation)
         self.assertTrue(settings.sab_auto_credit_customer_return)
         self.assertFalse(settings.sab_auto_post_credit_customer)
+        self.assertFalse(settings.sab_auto_validate_customer_return_on_credit_note)
         self.assertTrue(settings.sab_auto_bill_receipt)
         self.assertFalse(settings.sab_auto_post_bill)
         self.assertFalse(settings.sab_auto_validate_receipt_on_purchase_confirmation)
         self.assertTrue(settings.sab_auto_credit_vendor_return)
         self.assertFalse(settings.sab_auto_post_credit_vendor)
+        self.assertFalse(settings.sab_auto_validate_vendor_return_on_credit_note)
         self.assertTrue(settings.sab_reduce_ordered_qty_on_return)

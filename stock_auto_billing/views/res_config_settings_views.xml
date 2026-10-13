@@ -38,6 +38,10 @@
                                  help="Post the automatically created customer credit note.">
                             <field name="sab_auto_post_credit_customer"/>
                         </setting>
+                        <setting id="sab_auto_validate_customer_return_on_credit_note"
+                                 help="Create and validate a customer return using the quantities on a posted credit note.">
+                            <field name="sab_auto_validate_customer_return_on_credit_note"/>
+                        </setting>
                         <setting id="sab_reduce_ordered_qty_on_return"
                                  help="Reduce the sale order line ordered quantity by the returned quantity when a customer return is credited.">
                             <field name="sab_reduce_ordered_qty_on_return"/>
@@ -71,6 +75,10 @@
                         <setting id="sab_auto_post_credit_vendor"
                                  help="Post the automatically created vendor credit note.">
                             <field name="sab_auto_post_credit_vendor"/>
+                        </setting>
+                        <setting id="sab_auto_validate_vendor_return_on_credit_note"
+                                 help="Create and validate a vendor return using the quantities on a posted vendor credit note.">
+                            <field name="sab_auto_validate_vendor_return_on_credit_note"/>
                         </setting>
                     </block>
                 </app>

@@ -26,6 +26,9 @@ class ResConfigSettings(models.TransientModel):
     sab_auto_post_credit_customer = fields.Boolean(
         related='company_id.sab_auto_post_credit_customer', readonly=False,
     )
+    sab_auto_validate_customer_return_on_credit_note = fields.Boolean(
+        related='company_id.sab_auto_validate_customer_return_on_credit_note', readonly=False,
+    )
     sab_auto_bill_receipt = fields.Boolean(
         related='company_id.sab_auto_bill_receipt', readonly=False,
     )
@@ -43,6 +46,9 @@ class ResConfigSettings(models.TransientModel):
     )
     sab_auto_post_credit_vendor = fields.Boolean(
         related='company_id.sab_auto_post_credit_vendor', readonly=False,
+    )
+    sab_auto_validate_vendor_return_on_credit_note = fields.Boolean(
+        related='company_id.sab_auto_validate_vendor_return_on_credit_note', readonly=False,
     )
     sab_reduce_ordered_qty_on_return = fields.Boolean(
         related='company_id.sab_reduce_ordered_qty_on_return', readonly=False,

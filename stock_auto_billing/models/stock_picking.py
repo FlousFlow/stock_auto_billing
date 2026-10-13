@@ -35,6 +35,14 @@ class StockPicking(models.Model):
         # --- مقيدة بصلاحيات المحاسبة حتى لا تنكسر شاشة التسليم لمستخدمي المخزون ---
         groups=_ACCOUNT_READ_GROUPS,
     )
+    sab_credit_note_id = fields.Many2one(
+        'account.move',
+        string='Credit Note Driving This Return',
+        copy=False,
+        readonly=True,
+        index=True,
+        groups=_ACCOUNT_READ_GROUPS,
+    )
     # --- حالة الفوترة التلقائية لهذا التسليم ---
     auto_billing_state = fields.Selection(
         [
@@ -164,6 +172,14 @@ class StockPicking(models.Model):
         """تصنيف التسليم وإنشاء المستند المحاسبي المناسب (يُستدعى بصلاحيات مرتفعة)."""
         # --- نتأكد أننا نتعامل مع تسليم واحد ---
         self.ensure_one()
+        if self.sab_credit_note_id:
+            self.write({
+                'auto_account_move_id': self.sab_credit_note_id.id,
+                'auto_billing_state': 'posted'
+                if self.sab_credit_note_id.state == 'posted' else 'created',
+                'auto_billing_error': False,
+            })
+            return
         # --- نتجاهل العمليات الداخلية والتصنيع والجرد والخردة ---
         if self.picking_type_code not in ('incoming', 'outgoing'):
             # --- عملية غير مؤهلة للفوترة التلقائية ---
@@ -426,6 +442,7 @@ class StockPicking(models.Model):
         invoice = invoices[0]
         credit_vals = {
             'move_type': 'out_refund',
+            'sab_created_from_stock_return': True,
             'partner_id': invoice.partner_id.id,
             'partner_shipping_id': invoice.partner_shipping_id.id,
             'currency_id': invoice.currency_id.id,
@@ -669,6 +686,7 @@ class StockPicking(models.Model):
         bill = bills[0]
         credit_vals = {
             'move_type': 'in_refund',
+            'sab_created_from_stock_return': True,
             'partner_id': bill.partner_id.id,
             'currency_id': bill.currency_id.id,
             'fiscal_position_id': bill.fiscal_position_id.id,
