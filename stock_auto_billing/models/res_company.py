@@ -47,9 +47,9 @@ class ResCompany(models.Model):
         default=False,
     )
     sab_auto_validate_customer_return_on_credit_note = fields.Boolean(
-        string='Validate Customer Returns from Credit Notes',
-        help='Create and validate a customer return for the quantities on a posted '
-             'credit note linked to a sales invoice.',
+        string='Reconcile Customer Stock on Replacement Invoice',
+        help='After Odoo Reverse and Modify is used for one customer invoice, return '
+             'only completed delivery quantity exceeding the posted replacement invoice.',
         default=False,
     )
     # --- تفعيل إنشاء فاتورة مورد تلقائياً بعد اعتماد الاستلام المرتبط بأمر شراء ---
@@ -92,9 +92,9 @@ class ResCompany(models.Model):
         default=False,
     )
     sab_auto_validate_vendor_return_on_credit_note = fields.Boolean(
-        string='Validate Vendor Returns from Credit Notes',
-        help='Create and validate a vendor return for the quantities on a posted '
-             'credit note linked to a vendor bill.',
+        string='Reconcile Vendor Stock on Replacement Bill',
+        help='After Odoo Reverse and Modify is used for one vendor bill, return only '
+             'completed receipt quantity exceeding the posted replacement bill.',
         default=False,
     )
     # --- تقليل كمية الطلب في أمر البيع بمقدار الكمية المرتجعة بعد المرتجع ---

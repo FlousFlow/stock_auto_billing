@@ -43,6 +43,14 @@ class StockPicking(models.Model):
         index=True,
         groups=_ACCOUNT_READ_GROUPS,
     )
+    sab_replacement_invoice_id = fields.Many2one(
+        'account.move',
+        string='Replacement Invoice or Bill',
+        copy=False,
+        readonly=True,
+        index=True,
+        groups=_ACCOUNT_READ_GROUPS,
+    )
     # --- حالة الفوترة التلقائية لهذا التسليم ---
     auto_billing_state = fields.Selection(
         [
@@ -173,10 +181,13 @@ class StockPicking(models.Model):
         # --- نتأكد أننا نتعامل مع تسليم واحد ---
         self.ensure_one()
         if self.sab_credit_note_id:
+            accounting_document = (
+                self.sab_replacement_invoice_id or self.sab_credit_note_id
+            )
             self.write({
-                'auto_account_move_id': self.sab_credit_note_id.id,
+                'auto_account_move_id': accounting_document.id,
                 'auto_billing_state': 'posted'
-                if self.sab_credit_note_id.state == 'posted' else 'created',
+                if accounting_document.state == 'posted' else 'created',
                 'auto_billing_error': False,
             })
             return

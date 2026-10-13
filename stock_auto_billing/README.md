@@ -48,8 +48,9 @@ All settings are **per-company** (each company can enable/disable independently)
   when the complete requested quantity is available (default off).
 * **Automatic Customer Credit Notes** — after customer return validation (default on).
 * **Post Customer Credit Notes Automatically** (default off).
-* **Validate Customer Returns from Credit Notes** — create and validate a
-  customer return from the quantities on a linked, posted credit note (default off).
+* **Reconcile Customer Stock on Replacement Invoice** — when one posted customer
+  invoice is reversed using Odoo's standard **Reverse and Modify** and the replacement
+  invoice is posted, return only the excess completed delivery quantity (default off).
 * **Automatic Vendor Bills** — after receipt validation (default on).
 * **Post Vendor Bills Automatically** (default off).
 * **Bill Purchase Orders on Confirmation** — create the vendor bill as soon as a
@@ -58,8 +59,9 @@ All settings are **per-company** (each company can enable/disable independently)
   automatically after purchase confirmation (default off).
 * **Automatic Vendor Credit Notes** — after vendor return validation (default on).
 * **Post Vendor Credit Notes Automatically** (default off).
-* **Validate Vendor Returns from Credit Notes** — create and validate a vendor
-  return from the quantities on a linked, posted vendor credit note (default off).
+* **Reconcile Vendor Stock on Replacement Bill** — when one posted vendor bill is
+  reversed using Odoo's standard **Reverse and Modify** and the replacement bill is
+  posted, return only the excess completed receipt quantity (default off).
 * **Reduce Order Quantity on Customer Return** — after a customer return is
   credited, the sale order line ordered quantity is reduced by the returned
   quantity (default on). Keeps the order net quantity consistent with the
@@ -93,11 +95,16 @@ idempotent and never creates duplicates.
   validated only when all requested quantities are reserved. Missing stock,
   lot/serial data or another standard validation requirement leaves the picking
   ready and records the reason in its chatter; order confirmation is not blocked.
-* Credit-note-driven returns are independently opt-in. When enabled, posting a
-  credit note linked to an original invoice/bill creates and validates a return
-  for the credited quantity only. Unlinked lines, quantities beyond completed
-  stock moves, or tracked products requiring lot/serial selection are left for
-  manual stock processing and reported on the credit note.
+* Reverse-and-replace stock reconciliation is independently opt-in. Odoo's
+  standard **Reverse and Modify** flow explicitly links its credit note and
+  replacement invoice/bill. When that replacement is posted, only the net
+  difference between completed original stock and replacement quantities is
+  returned through standard stock pickings. A 10-unit receipt replaced by an
+  8-unit bill therefore creates a 2-unit vendor return, not a return of all 10.
+  Posting a standalone credit note never triggers a stock return. Ambiguous or
+  unlinked lines, multi-document wizard use, or tracked products requiring
+  lot/serial selection are left for manual stock processing and reported in chatter.
+  No stock quantities or accounting journal items are written directly.
 * It runs **after** the inventory operation is complete and never blocks it: if
   document creation fails, the error is caught, stored in
   `auto_billing_error`, the state is set to `failed`, a clear message is posted

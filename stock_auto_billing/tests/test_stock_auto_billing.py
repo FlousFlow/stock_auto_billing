@@ -114,6 +114,20 @@ class TestStockAutoBilling(TestSaleCommon):
         return_pick.move_ids.quantity = qty
         return return_pick
 
+    def _reverse_and_replace_invoice(self, invoice):
+        """Use Odoo's standard Reverse and Modify flow and return both documents."""
+        existing_reversals = invoice.reversal_move_ids
+        wizard = self.env['account.move.reversal'].create({
+            'move_ids': [Command.set(invoice.ids)],
+            'company_id': invoice.company_id.id,
+            'journal_id': invoice.journal_id.id,
+            'date': fields.Date.today(),
+        })
+        action = wizard.modify_moves()
+        credit_note = invoice.reversal_move_ids - existing_reversals
+        replacement = self.env['account.move'].browse(action['res_id'])
+        return credit_note, replacement
+
     @staticmethod
     def _product_line(invoice):
         """إرجاع سطر المنتج الوحيد في المستند المحاسبي."""
@@ -308,19 +322,25 @@ class TestStockAutoBilling(TestSaleCommon):
     # اختبارات مرتجعات العملاء
     # ------------------------------------------------------------------
     def test_posted_customer_credit_note_validates_matching_return(self):
-        """A posted customer credit note returns only its credited quantity."""
+        """Reverse-and-modify returns only the difference after replacement invoice posts."""
         self.env.company.sab_auto_validate_customer_return_on_credit_note = True
-        sale = self._create_sale_order(self.stock_product, 5)
-        delivery = self._validate_picking(sale.picking_ids, 5)
+        sale = self._create_sale_order(self.stock_product, 10)
+        delivery = self._validate_picking(sale.picking_ids, 10)
         invoice = delivery.auto_account_move_id
         invoice.invoice_date = fields.Date.today()
         invoice.action_post()
 
-        credit = invoice._reverse_moves(default_values_list=[{
-            'invoice_date': fields.Date.today(),
-        }])
-        self._product_line(credit).quantity = 2
-        credit.action_post()
+        credit, replacement = self._reverse_and_replace_invoice(invoice)
+        self.assertEqual(credit.state, 'posted')
+        self.assertEqual(replacement.sab_replacement_credit_note_id, credit)
+        self.assertEqual(self._product_line(credit).quantity, 10)
+        self.assertFalse(self.env['stock.picking'].search([
+            ('sab_credit_note_id', '=', credit.id),
+        ]))
+
+        self._product_line(replacement).quantity = 8
+        replacement.invoice_date = fields.Date.today()
+        replacement.action_post()
 
         return_picking = self.env['stock.picking'].search([
             ('sab_credit_note_id', '=', credit.id),
@@ -328,7 +348,8 @@ class TestStockAutoBilling(TestSaleCommon):
         self.assertEqual(len(return_picking), 1)
         self.assertEqual(return_picking.state, 'done')
         self.assertEqual(return_picking.move_ids.quantity, 2)
-        self.assertEqual(return_picking.auto_account_move_id, credit)
+        self.assertEqual(return_picking.sab_replacement_invoice_id, replacement)
+        self.assertEqual(return_picking.auto_account_move_id, replacement)
         self.assertEqual(return_picking.auto_billing_state, 'posted')
 
     def test_credit_note_generated_from_return_does_not_create_second_return(self):
@@ -428,19 +449,25 @@ class TestStockAutoBilling(TestSaleCommon):
     # اختبارات مرتجعات الموردين
     # ------------------------------------------------------------------
     def test_posted_vendor_credit_note_validates_matching_return(self):
-        """A posted vendor credit note returns only its credited quantity."""
+        """A replacement vendor bill for 8 returns only 2 of 10 received units."""
         self.env.company.sab_auto_validate_vendor_return_on_credit_note = True
-        purchase = self._create_purchase_order(self.stock_product, 5)
-        receipt = self._validate_picking(purchase.picking_ids, 5)
+        purchase = self._create_purchase_order(self.stock_product, 10)
+        receipt = self._validate_picking(purchase.picking_ids, 10)
         bill = receipt.auto_account_move_id
         bill.invoice_date = fields.Date.today()
         bill.action_post()
 
-        credit = bill._reverse_moves(default_values_list=[{
-            'invoice_date': fields.Date.today(),
-        }])
-        self._product_line(credit).quantity = 2
-        credit.action_post()
+        credit, replacement = self._reverse_and_replace_invoice(bill)
+        self.assertEqual(credit.state, 'posted')
+        self.assertEqual(replacement.sab_replacement_credit_note_id, credit)
+        self.assertEqual(self._product_line(credit).quantity, 10)
+        self.assertFalse(self.env['stock.picking'].search([
+            ('sab_credit_note_id', '=', credit.id),
+        ]))
+
+        self._product_line(replacement).quantity = 8
+        replacement.invoice_date = fields.Date.today()
+        replacement.action_post()
 
         return_picking = self.env['stock.picking'].search([
             ('sab_credit_note_id', '=', credit.id),
@@ -448,7 +475,8 @@ class TestStockAutoBilling(TestSaleCommon):
         self.assertEqual(len(return_picking), 1)
         self.assertEqual(return_picking.state, 'done')
         self.assertEqual(return_picking.move_ids.quantity, 2)
-        self.assertEqual(return_picking.auto_account_move_id, credit)
+        self.assertEqual(return_picking.sab_replacement_invoice_id, replacement)
+        self.assertEqual(return_picking.auto_account_move_id, replacement)
         self.assertEqual(return_picking.auto_billing_state, 'posted')
 
     def test_vendor_return_creates_credit_note(self):
