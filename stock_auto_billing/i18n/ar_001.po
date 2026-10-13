@@ -413,3 +413,366 @@ msgstr "تحويل"
 #: model_terms:ir.ui.view,arch_db:stock_auto_billing.res_config_settings_view_form_auto_billing
 msgid "Vendor Returns"
 msgstr "مرتجعات الموردين"
+
+#. module: stock_auto_billing
+#: model:ir.module.module,description:base.module_stock_auto_billing
+msgid ""
+"\n"
+"Stock Auto Billing\n"
+"==================\n"
+"Automatically creates the appropriate accounting document when a stock picking\n"
+"is validated, based only on the quantity actually delivered, received or\n"
+"returned:\n"
+"\n"
+"* Customer delivery validated  -> Customer Invoice (delivered quantities only).\n"
+"* Customer return validated    -> Customer Credit Note (returned quantities only).\n"
+"* Vendor receipt validated     -> Vendor Bill (received quantities only).\n"
+"* Return to vendor validated   -> Vendor Credit Note (returned quantities only).\n"
+"* Sales / purchase order confirmed -> Customer invoice / vendor bill (optional).\n"
+"* Sales / purchase order confirmed -> Delivery / receipt validation (optional).\n"
+"\n"
+"All documents preserve the source order line price, discount, taxes, currency,\n"
+"payment terms, fiscal position and analytic distribution. Partial deliveries /\n"
+"receipts and multiple pickings per order are supported. Duplicates are never\n"
+"created for the same picking or quantity.\n"
+"\n"
+"Automatic posting is optional and controlled through per-company settings\n"
+"(Settings > Inventory > Automatic Billing).\n"
+msgstr ""
+"\n"
+"الفوترة التلقائية للمخزون\n"
+"========================\n"
+"ينشئ هذا الموديول المستند المحاسبي المناسب تلقائياً عند اعتماد حركة مخزنية،\n"
+"اعتماداً على الكمية التي تم تسليمها أو استلامها أو إرجاعها فعلياً:\n"
+"\n"
+"* اعتماد تسليم عميل: إنشاء فاتورة عميل بالكميات المسلّمة فقط.\n"
+"* اعتماد مرتجع عميل: إنشاء إشعار دائن بالكميات المرتجعة فقط.\n"
+"* اعتماد استلام مورد: إنشاء فاتورة مورد بالكميات المستلمة فقط.\n"
+"* اعتماد مرتجع إلى المورد: إنشاء إشعار دائن للمورد بالكميات المرتجعة فقط.\n"
+"* تأكيد أمر بيع أو شراء: يمكن اختيارياً إنشاء الفاتورة أو فاتورة المورد.\n"
+"* تأكيد أمر بيع أو شراء: يمكن اختيارياً اعتماد التسليم أو الاستلام.\n"
+"\n"
+"تحافظ المستندات على سعر بند الطلب وخصمه وضرائبه وعملته وشروط الدفع\n"
+"والوضع الضريبي والتوزيع التحليلي. كما يدعم الموديول التسليمات والاستلامات\n"
+"الجزئية وتعدد الحركات لكل طلب، ويتجنب إنشاء مستندات مكررة للحركة أو الكمية نفسها.\n"
+"\n"
+"يمكن تفعيل الترحيل التلقائي اختيارياً لكل شركة من الإعدادات:\n"
+"الإعدادات > المخزون > الفوترة التلقائية.\n"
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/account_move.py:0
+msgid "%(origin)s / %(replacement)s"
+msgstr "%(origin)s / %(replacement)s"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,help:stock_auto_billing.field_res_config_settings__sab_auto_validate_customer_return_on_credit_note
+msgid "After Odoo Reverse and Modify is used for one customer invoice, return only completed delivery quantity exceeding the posted replacement invoice."
+msgstr "بعد استخدام إجراء أودو «عكس وتعديل» لفاتورة عميل واحدة، أرجِع فقط الكمية المسلّمة المعتمدة التي تزيد على كمية الفاتورة البديلة المرحلة."
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,help:stock_auto_billing.field_res_config_settings__sab_auto_validate_vendor_return_on_credit_note
+msgid "After Odoo Reverse and Modify is used for one vendor bill, return only completed receipt quantity exceeding the posted replacement bill."
+msgstr "بعد استخدام إجراء أودو «عكس وتعديل» لفاتورة مورد واحدة، أرجِع فقط الكمية المستلمة المعتمدة التي تزيد على كمية الفاتورة البديلة المرحلة."
+
+#. module: stock_auto_billing
+#: model_terms:ir.ui.view,arch_db:stock_auto_billing.res_config_settings_view_form_auto_billing
+msgid "After Odoo Reverse and Modify, return only completed delivery quantities exceeding the posted replacement invoice."
+msgstr "بعد استخدام إجراء أودو «عكس وتعديل»، أرجِع فقط الكميات المسلّمة المعتمدة التي تزيد على كمية الفاتورة البديلة المرحلة."
+
+#. module: stock_auto_billing
+#: model_terms:ir.ui.view,arch_db:stock_auto_billing.res_config_settings_view_form_auto_billing
+msgid "After Odoo Reverse and Modify, return only completed receipt quantities exceeding the posted replacement bill."
+msgstr "بعد استخدام إجراء أودو «عكس وتعديل»، أرجِع فقط الكميات المستلمة المعتمدة التي تزيد على كمية فاتورة المورد البديلة المرحلة."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/account_move.py:0
+msgid "Automatic return for tracked product %s requires a manual lot/serial selection."
+msgstr "يتطلب الإرجاع التلقائي للمنتج ذي التتبع %s تحديد رقم التشغيلة أو الرقم التسلسلي يدوياً."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/account_move_reversal.py:0
+msgid "Automatic stock reconciliation is available when Reverse and Modify is run for one invoice or vendor bill at a time. Please reconcile stock manually for this multi-document operation."
+msgstr "تسوية المخزون التلقائية متاحة عند استخدام «عكس وتعديل» لمستند واحد فقط في كل مرة. يُرجى تسوية المخزون يدوياً لهذه العملية متعددة المستندات."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/account_move.py:0
+msgid "Automatic stock reconciliation was not completed for this replacement invoice: %s"
+msgstr "لم تكتمل تسوية المخزون التلقائية لهذه الفاتورة البديلة: %s"
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/stock_picking.py:0
+msgid "Automatic stock validation was skipped: %s"
+msgstr "تم تخطي الاعتماد التلقائي لحركة المخزون: %s"
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/stock_picking.py:0
+msgid "Automatic validation requires a manual stock operation for this picking."
+msgstr "يتطلب الاعتماد التلقائي تنفيذ إجراء مخزني يدوي لهذه الحركة."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/stock_picking.py:0
+msgid "Automatic validation was skipped because the full delivery quantity is not available."
+msgstr "تم تخطي الاعتماد التلقائي لعدم توفر كامل كمية التسليم."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/account_move.py:0
+msgid "Automatic vendor return was skipped because the returned quantity could not be fully reserved for %s."
+msgstr "تم تخطي مرتجع المورد التلقائي لتعذر حجز كامل الكمية المرتجعة للحركة %s."
+
+#. module: stock_auto_billing
+#: model:ir.module.module,shortdesc:base.module_stock_auto_billing
+msgid "Automatically bill orders and stock pickings with duplicate-safe accounting links"
+msgstr "فوترة تلقائية للطلبات والحركات المخزنية مع منع تكرار المستندات المحاسبية"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,help:stock_auto_billing.field_res_config_settings__sab_auto_validate_delivery_on_sale_confirmation
+msgid "Automatically validate the delivery when the full requested quantity is available."
+msgstr "اعتماد حركة التسليم تلقائياً عند توفر كامل الكمية المطلوبة."
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,help:stock_auto_billing.field_res_config_settings__sab_auto_validate_receipt_on_purchase_confirmation
+msgid "Automatically validate the incoming receipt after a purchase order is confirmed."
+msgstr "اعتماد حركة الاستلام الواردة تلقائياً بعد تأكيد أمر الشراء."
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,help:stock_auto_billing.field_res_company__sab_auto_validate_delivery_on_sale_confirmation
+msgid "Automatically validate the outgoing delivery after a sales order is confirmed, only when the full requested quantity is available."
+msgstr "اعتماد حركة التسليم الصادرة تلقائياً بعد تأكيد أمر البيع، بشرط توفر كامل الكمية المطلوبة."
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,help:stock_auto_billing.field_res_company__sab_auto_validate_receipt_on_purchase_confirmation
+msgid "Automatically validate the receipt after a purchase order is confirmed."
+msgstr "اعتماد حركة الاستلام تلقائياً بعد تأكيد أمر الشراء."
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_company__sab_auto_bill_on_purchase_confirmation
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_config_settings__sab_auto_bill_on_purchase_confirmation
+msgid "Bill Purchase Orders on Confirmation"
+msgstr "إنشاء فواتير الموردين عند تأكيد أوامر الشراء"
+
+#. module: stock_auto_billing
+#: model:ir.model,name:stock_auto_billing.model_res_company
+msgid "Company"
+msgstr "الشركة"
+
+#. module: stock_auto_billing
+#: model:ir.model,name:stock_auto_billing.model_account_move
+msgid "Journal Entry"
+msgstr "قيد اليومية"
+
+#. module: stock_auto_billing
+#: model:ir.model,name:stock_auto_billing.model_account_move_reversal
+msgid "Journal Entry Reversal"
+msgstr "عكس قيد اليومية"
+
+#. module: stock_auto_billing
+#: model_terms:ir.ui.view,arch_db:stock_auto_billing.res_config_settings_view_form_auto_billing
+msgid "Create a customer invoice immediately when a sales order is confirmed."
+msgstr "إنشاء فاتورة عميل فور تأكيد أمر البيع."
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,help:stock_auto_billing.field_res_company__sab_auto_invoice_on_sale_confirmation
+msgid "Create a customer invoice immediately when a sales order is confirmed. The delivery is still created by standard Odoo and remains available for the normal stock workflow."
+msgstr "إنشاء فاتورة عميل فور تأكيد أمر البيع. يظل أودو ينشئ حركة التسليم القياسية لتستمر دورة المخزون المعتادة."
+
+#. module: stock_auto_billing
+#: model_terms:ir.ui.view,arch_db:stock_auto_billing.res_config_settings_view_form_auto_billing
+msgid "Create a vendor bill immediately when a purchase order is confirmed."
+msgstr "إنشاء فاتورة مورد فور تأكيد أمر الشراء."
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,help:stock_auto_billing.field_res_company__sab_auto_bill_on_purchase_confirmation
+msgid "Create a vendor bill immediately when a purchase order is confirmed. The receipt is still created by standard Odoo and remains available for the normal stock workflow."
+msgstr "إنشاء فاتورة مورد فور تأكيد أمر الشراء. يظل أودو ينشئ حركة الاستلام القياسية لتستمر دورة المخزون المعتادة."
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,field_description:stock_auto_billing.field_account_bank_statement_line__sab_created_from_stock_return
+#: model:ir.model.fields,field_description:stock_auto_billing.field_account_move__sab_created_from_stock_return
+msgid "Created from Stock Return"
+msgstr "أُنشئ من مرتجع مخزني"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,field_description:stock_auto_billing.field_account_bank_statement_line__sab_order_confirmation
+#: model:ir.model.fields,field_description:stock_auto_billing.field_account_move__sab_order_confirmation
+msgid "Created on Order Confirmation"
+msgstr "أُنشئ عند تأكيد الطلب"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,field_description:stock_auto_billing.field_stock_picking__sab_credit_note_id
+msgid "Credit Note Driving This Return"
+msgstr "إشعار الدائن المرتبط بهذا المرتجع"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,field_description:stock_auto_billing.field_account_bank_statement_line__sab_replacement_credit_note_id
+#: model:ir.model.fields,field_description:stock_auto_billing.field_account_move__sab_replacement_credit_note_id
+msgid "Credit Note Replaced by This Invoice"
+msgstr "إشعار الدائن الذي تستبدله هذه الفاتورة"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_company__sab_auto_invoice_on_sale_confirmation
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_config_settings__sab_auto_invoice_on_sale_confirmation
+msgid "Invoice Sales Orders on Confirmation"
+msgstr "فوترة أوامر البيع عند تأكيدها"
+
+#. module: stock_auto_billing
+#: model:ir.model,name:stock_auto_billing.model_purchase_order
+msgid "Purchase Order"
+msgstr "أمر شراء"
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/account_move_reversal.py:0
+msgid "Linked to replacement document %(replacement)s by Odoo Reverse and Modify."
+msgstr "تم الربط بالمستند البديل %(replacement)s بواسطة إجراء أودو «عكس وتعديل»."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/account_move.py:0
+msgid "No completed source stock operation was found for %s."
+msgstr "لم يتم العثور على حركة مخزنية مصدرية مكتملة للصنف %s."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/account_move.py:0
+msgid "No stock return was needed: completed net stock quantities already match or are below the replacement invoice quantities."
+msgstr "لا حاجة إلى مرتجع مخزني؛ فصافي الكميات المخزنية المكتملة يساوي كمية الفاتورة البديلة أو يقل عنها."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/account_move.py:0
+msgid "Odoo requires a manual stock operation to complete return %s."
+msgstr "يتطلب أودو تنفيذ إجراء مخزني يدوي لإكمال المرتجع %s."
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,help:stock_auto_billing.field_account_move__sab_created_from_stock_return
+msgid "Prevents a credit note generated by a validated return from creating a second stock return when it is posted."
+msgstr "يمنع إشعار الدائن الناتج عن مرتجع معتمد من إنشاء مرتجع مخزني ثانٍ عند ترحيله."
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_company__sab_auto_validate_customer_return_on_credit_note
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_config_settings__sab_auto_validate_customer_return_on_credit_note
+msgid "Reconcile Customer Stock on Replacement Invoice"
+msgstr "تسوية مخزون العميل عند ترحيل الفاتورة البديلة"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_company__sab_auto_validate_vendor_return_on_credit_note
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_config_settings__sab_auto_validate_vendor_return_on_credit_note
+msgid "Reconcile Vendor Stock on Replacement Bill"
+msgstr "تسوية مخزون المورد عند ترحيل الفاتورة البديلة"
+
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,field_description:stock_auto_billing.field_account_bank_statement_line__sab_replacement_invoice_ids
+#: model:ir.model.fields,field_description:stock_auto_billing.field_account_move__sab_replacement_invoice_ids
+msgid "Replacement Invoices"
+msgstr "الفواتير البديلة"
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/account_move.py:0
+msgid "Replacement invoice %(invoice)s was posted; stock returns %(pickings)s were created for the net quantity difference."
+msgstr "تم ترحيل الفاتورة البديلة %(invoice)s، وإنشاء حركات المرتجع %(pickings)s بصافي فرق الكمية."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/account_move.py:0
+msgid "Replacement invoice line for %s is not linked to its original sales or purchase order line."
+msgstr "سطر الفاتورة البديلة للصنف %s غير مرتبط ببند أمر البيع أو الشراء الأصلي."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/account_move.py:0
+msgid "Stock Auto Billing"
+msgstr "الفوترة التلقائية للمخزون"
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/account_move.py:0
+msgid "Stock reconciliation was skipped because the replacement invoice has no linked stockable sales or purchase lines."
+msgstr "تم تخطي تسوية المخزون لعدم وجود بنود مخزنية مرتبطة بأمر بيع أو شراء في الفاتورة البديلة."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/account_move.py:0
+msgid "Stock return(s) %(pickings)s were validated for the quantity difference between the completed stock operations and this replacement invoice. Credit note: %(credit_note)s."
+msgstr "تم اعتماد حركات المرتجع %(pickings)s بفرق الكمية بين الحركات المخزنية المكتملة وهذه الفاتورة البديلة. إشعار الدائن: %(credit_note)s."
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,help:stock_auto_billing.field_account_move__sab_order_confirmation
+msgid "Technical marker for invoices and bills created when an order was confirmed."
+msgstr "علامة تقنية للفواتير التي أُنشئت عند تأكيد الطلب."
+
+#. module: stock_auto_billing
+#: model:ir.model,name:stock_auto_billing.model_sale_order
+msgid "Sales Order"
+msgstr "أمر بيع"
+
+#. module: stock_auto_billing
+#: model:ir.model,name:stock_auto_billing.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "بند أمر البيع"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,help:stock_auto_billing.field_res_company__sab_reduce_ordered_qty_on_return
+msgid "Reduce the sale order line ordered quantity by the returned quantity when a customer return is credited."
+msgstr "تقليل الكمية المطلوبة في بند أمر البيع بمقدار الكمية المرتجعة عند إصدار إشعار دائن لمرتجع العميل."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/account_move.py:0
+msgid "The original invoice and its credit note must both be posted before stock can be reconciled."
+msgstr "يجب ترحيل الفاتورة الأصلية وإشعار الدائن المرتبط بها قبل تسوية المخزون."
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,help:stock_auto_billing.field_account_move__sab_replacement_credit_note_id
+msgid "The posted credit note generated by Odoo Reverse and Modify for this invoice."
+msgstr "إشعار الدائن المُرحّل الذي أنشأه إجراء أودو «عكس وتعديل» لهذه الفاتورة."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/account_move_reversal.py:0
+msgid "The replacement invoice could not be linked unambiguously to its credit note. Please reconcile stock manually."
+msgstr "تعذر ربط الفاتورة البديلة بإشعار الدائن بشكل واضح. يُرجى تسوية المخزون يدوياً."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/account_move.py:0
+msgid "The replacement invoice, original invoice, and credit note types do not match."
+msgstr "أنواع الفاتورة البديلة والفاتورة الأصلية وإشعار الدائن غير متطابقة."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/account_move.py:0
+msgid "The stock quantity to return for %s could not be matched to completed source operations."
+msgstr "تعذر مطابقة كمية المرتجع للصنف %s مع الحركات المخزنية المصدرية المكتملة."
+
+#. module: stock_auto_billing
+#. odoo-python
+#: code:addons/stock_auto_billing/models/account_move_reversal.py:0
+msgid "This replacement document is linked to credit note %(credit_note)s. Stock will be reconciled to the replacement quantity when it is posted."
+msgstr "هذا المستند البديل مرتبط بإشعار الدائن %(credit_note)s. ستتم تسوية المخزون وفقاً لكمية المستند البديل عند ترحيله."
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_company__sab_auto_validate_delivery_on_sale_confirmation
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_config_settings__sab_auto_validate_delivery_on_sale_confirmation
+msgid "Validate Deliveries on Sales Confirmation"
+msgstr "اعتماد التسليمات عند تأكيد أوامر البيع"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_company__sab_auto_validate_receipt_on_purchase_confirmation
+#: model:ir.model.fields,field_description:stock_auto_billing.field_res_config_settings__sab_auto_validate_receipt_on_purchase_confirmation
+msgid "Validate Receipts on Purchase Confirmation"
+msgstr "اعتماد الاستلامات عند تأكيد أوامر الشراء"
+
+#. module: stock_auto_billing
+#: model:ir.model.fields,field_description:stock_auto_billing.field_stock_picking__sab_replacement_invoice_id
+msgid "Replacement Invoice or Bill"
+msgstr "الفاتورة البديلة"
